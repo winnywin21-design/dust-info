@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>미세먼지 알리미</title>
+    <style>
+        * { box-sizing: border-box; }
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            overflow: hidden;
+            font-family: Arial, "Noto Sans KR", sans-serif;
+        }
+        #video-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        video {
+            width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .back-btn {
+            position: fixed;
+            top: 18px;
+            left: 18px;
+            z-index: 20;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 18px;
+            border-radius: 999px;
+            background: rgba(0,0,0,0.72);
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+            border: 1px solid rgba(255,255,255,0.22);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+        }
+        #overlay-text {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 30px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            display: none;
+            text-decoration: none;
+            font-weight: bold;
+            border: 2px solid #fff;
+            animation: fadeIn 0.5s ease-in-out;
+            z-index: 10;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        #cardnews-frame {
+            display: none;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <a class="back-btn" href="index.html">← 돌아가기</a>
+    <div id="video-container">
+        <video id="intro-video" playsinline controls>
+            <source src="fine_dust_video.mp4" type="video/mp4">
+            브라우저가 비디오 태그를 지원하지 않습니다.
+        </video>
+        <a href="#" id="overlay-text" onclick="showCardNews(); return false;">카드뉴스 보러가기</a>
+    </div>
+    <iframe id="cardnews-frame" src="card_news.html" title="미세먼지 카드뉴스"></iframe>
+    <script>
+        const video = document.getElementById('intro-video');
+        const overlayText = document.getElementById('overlay-text');
+        const videoContainer = document.getElementById('video-container');
+        const iframe = document.getElementById('cardnews-frame');
+
+        window.addEventListener('load', () => {
+            video.play().catch(() => {
+                document.body.addEventListener('click', () => video.play(), {once: true});
+            });
+        });
+
+        video.onended = function() {
+            overlayText.style.display = 'block';
+        };
+
+        function showCardNews() {
+            videoContainer.style.display = 'none';
+            iframe.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
